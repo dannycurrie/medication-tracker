@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Medication {
+  id             Int             @id @default(autoincrement())
+  name           String
+  created_at     DateTime        @default(now())
+  dose           Int
+  limit_24_hour  Int
+  Medication_log MedicationLog[]
+}
+
+model MedicationLog {
+  id            Int        @id @default(autoincrement())
+  created_at    DateTime   @default(now())
+  medication_id Int
+  medication    Medication @relation(fields: [medication_id], references: [id])
+  taken_at      DateTime
+}
